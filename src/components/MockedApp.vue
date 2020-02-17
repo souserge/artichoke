@@ -4,7 +4,6 @@
       <div class="menu" @click="toggleMenu"></div>
       <div class="order" @click="makeOrder">
         <p>ORDER</p>
-        <!-- <div class="logo"></div> -->
       </div>
       <transition name="slide-right">
         <div v-show="isOrderComplete" class="order-complete">

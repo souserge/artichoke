@@ -153,4 +153,10 @@ table {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+
+h2 {
+  font-weight: 900;
+  font-size: 1.5em;
+  color: rgb(91, 212, 91);
+}
 </style>
