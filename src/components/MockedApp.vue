@@ -1,73 +1,81 @@
 <template>
   <div class="container">
-    <div class="mocked-app">
-      <div class="menu" @click="toggleMenu"></div>
-      <div class="order" @click="makeOrder">
-        <p>ORDER</p>
+    <fullscreen ref="fullscreen" @change="fullscreenChange">
+      <div class="mocked-app">
+        <div class="fullscreen" @click="toggleFullscreen">{{ fullscreenText }}</div>
+        <div class="menu" @click="toggleMenu"></div>
+        <div class="order" @click="makeOrder">
+          <p>ORDER</p>
+        </div>
+        <transition name="slide-right">
+          <div v-show="isOrderComplete" class="order-complete">
+            <p>{{ getOrderCompleteString() }}</p>
+            <p class="order-complete__greeting">Bon Appétit!</p>
+          </div>
+        </transition>
+        <transition name="slide-left">
+          <div v-show="isMenuOpened" class="menu-dropdown">
+            <ul>
+              <li
+                :key="idx"
+                v-for="(dish, idx) in dishes"
+                @click="selectMenuDish(idx)"
+              >{{ idx + 1 }}. {{ dish.name }}</li>
+            </ul>
+          </div>
+        </transition>
+        <vue-displacement-slideshow
+          class="dish"
+          :images="dishSources"
+          :intensity="0.2"
+          :speedIn="0.4"
+          :speedOut="0.4"
+          ease="Expo.easeInOut"
+          ref="slideshow"
+        ></vue-displacement-slideshow>
+        <div class="info">
+          <div class="info__name">({{ currentDishIdx + 1 }}/{{ numDishes }}) {{ currentDish.name }}</div>
+          <div class="info__size">
+            Portion size ({{currentDish.minSize}}–{{currentDish.maxSize}} grams):
+            <input
+              type="number"
+              :min="currentDish.minSize"
+              :max="currentDish.maxSize"
+              v-model="dishSizeSelector"
+              @change="changeSelectedSize"
+              @input="changeSelectedSize"
+              :step="10"
+            /> g
+          </div>
+          <!-- <div class="info__desc">{{ currentDish.desc }}</div> -->
+          <div class="info__ingredients">
+            <v-dropdown>
+              <template v-slot:label>Ingredients</template>
+              <template v-slot:content>{{ getIngredientsString(currentDish) }}</template>
+            </v-dropdown>
+          </div>
+          <div class="info__nutrition">
+            <v-dropdown>
+              <template v-slot:label>Nutrition</template>
+              <template v-slot:content>
+                <div class="nutrition-data">{{ getNutritionString(currentDish) }}</div>
+              </template>
+            </v-dropdown>
+          </div>
+        </div>
+        <div class="arrow arrow--left" @click="changeDishLeft"></div>
+        <div class="arrow arrow--right" @click="changeDishRight"></div>
       </div>
-      <transition name="slide-right">
-        <div v-show="isOrderComplete" class="order-complete">
-          <p>{{ getOrderCompleteString() }}</p>
-          <p class="order-complete__greeting">Bon Appétit!</p>
-        </div>
-      </transition>
-      <transition name="slide-left">
-        <div v-show="isMenuOpened" class="menu-dropdown">
-          <ul>
-            <li
-              :key="idx"
-              v-for="(dish, idx) in dishes"
-              @click="selectMenuDish(idx)"
-            >{{ idx + 1 }}. {{ dish.name }}</li>
-          </ul>
-        </div>
-      </transition>
-      <vue-displacement-slideshow
-        class="dish"
-        :images="dishSources"
-        :intensity="0.2"
-        :speedIn="0.4"
-        :speedOut="0.4"
-        ease="Expo.easeInOut"
-        ref="slideshow"
-      ></vue-displacement-slideshow>
-      <div class="info">
-        <div class="info__name">({{ currentDishIdx + 1 }}/{{ numDishes }}) {{ currentDish.name }}</div>
-        <div class="info__size">
-          Portion size ({{currentDish.minSize}}–{{currentDish.maxSize}} grams):
-          <input
-            type="number"
-            :min="currentDish.minSize"
-            :max="currentDish.maxSize"
-            v-model="dishSizeSelector"
-            :step="10"
-          /> g
-        </div>
-        <!-- <div class="info__desc">{{ currentDish.desc }}</div> -->
-        <div class="info__ingredients">
-          <v-dropdown>
-            <template v-slot:label>Ingredients</template>
-            <template v-slot:content>{{ getIngredientsString(currentDish) }}</template>
-          </v-dropdown>
-        </div>
-        <div class="info__nutrition">
-          <v-dropdown>
-            <template v-slot:label>Nutrition</template>
-            <template v-slot:content>
-              <div class="nutrition-data">{{ getNutritionString(currentDish) }}</div>
-            </template>
-          </v-dropdown>
-        </div>
-      </div>
-      <div class="arrow arrow--left" @click="changeDishLeft"></div>
-      <div class="arrow arrow--right" @click="changeDishRight"></div>
-    </div>
+    </fullscreen>
   </div>
 </template>
 
 <script>
 import VueDisplacementSlideshow from "vue-displacement-slideshow";
 import VDropdown from "./VDropdown";
+import fullscreen from "vue-fullscreen";
+import Vue from "vue";
+Vue.use(fullscreen);
 
 // function constrain(x, a, b) {
 //   return x < a ? a : x > b ? b : x;
@@ -138,7 +146,8 @@ export default {
       currentDishIdx: 0,
       isMenuOpened: false,
       isOrderComplete: false,
-      dishSizeSelector: null
+      dishSizeSelector: null,
+      isFullscreen: false
     };
   },
 
@@ -153,10 +162,27 @@ export default {
 
     currentDish() {
       return this.dishes[this.currentDishIdx];
+    },
+
+    fullscreenText() {
+      return `${this.isFullscreen ? "exit" : "enter"} fullscreen`;
     }
   },
 
   methods: {
+    changeSelectedSize(size) {
+      this.currentDish.selectedSize = this.dishSizeSelector;
+      console.log(size);
+    },
+
+    toggleFullscreen() {
+      this.$refs.fullscreen.toggle();
+    },
+
+    fullscreenChange(fullscreen) {
+      this.isFullscreen = fullscreen;
+    },
+
     setImage(idx) {
       this.$refs.slideshow.next(idx);
     },
@@ -234,6 +260,21 @@ Fiber....................${cn(nutrition.fiber)} g`;
   position: relative;
   overflow: hidden;
 
+  .fullscreen {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: black;
+    font-size: 1em;
+    text-decoration: underline;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(lightgrey, 0.3);
+    }
+  }
+
   .dish {
     width: 100%;
     height: 100%;
@@ -303,7 +344,7 @@ Fiber....................${cn(nutrition.fiber)} g`;
     background-size: 50px 50px;
     cursor: pointer;
     width: 60px;
-    height: 50%;
+    height: 20%;
     position: absolute;
     top: calc(50%);
 
