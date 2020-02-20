@@ -4,9 +4,9 @@
       <img class="logo" src="@/assets/logo.png" />
       <h1 class="title">GreenAdvisor</h1>
     </div>
-    <div class="intro__description">Hello! We're GreenAdvisor! We're a startup that is blablabal.</div>
+    <div class="intro__description">{{ introText }}</div>
     <div class="intro__image">
-      <img alt="Instructions" src="../assets/instructions.jpg" />
+      <img alt="Instructions" src="../assets/instructions.jpeg" />
     </div>
     <div class="intro__footer">
       <h2>Try out our mockup below 👇</h2>
@@ -15,7 +15,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      introText: `Hello! We're GreenAdvisor! We have an idea of an Augmented Reality phone application that allows restaurant customers to see how the dishes in the menu look like regarding size and ingredients. This would allow for a more conscious customer decision that can yield a decrease in the food wasted in the restaurants.`
+    };
+  }
+};
 </script>
 
 <style lang="scss" scoped>
