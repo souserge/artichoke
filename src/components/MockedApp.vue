@@ -95,7 +95,7 @@ export default {
       dishes: [
         {
           src: require("@/assets/dish-1.jpg"),
-          name: "Rice with Salmon and veggies",
+          name: "Rice Pumpkin wok and spinach sauce",
           desc: "This is a beautiful dish",
           standardSize: 300,
           selectedSize: 300,
@@ -103,10 +103,10 @@ export default {
           maxSize: 600,
           ingredients: [
             { text: "Rice" },
-            { text: "salmon" },
-            { text: "soybeans" },
-            { text: "carrot" },
-            { text: "lemon" }
+            { text: "spinach" },
+            { text: "mushrooms" },
+            { text: "pumpkin" },
+            { text: "peach" }
           ],
           nutrition: {
             fat: 10,
@@ -119,18 +119,18 @@ export default {
         },
         {
           src: require("@/assets/dish-2.jpg"),
-          name: "Vegan choco pudding with fruit",
+          name: "Pasta and wok with tofu",
           desc: "This one is even better!",
           standardSize: 200,
           selectedSize: 200,
           minSize: 100,
           maxSize: 300,
           ingredients: [
-            { text: "Soya pudding" },
-            { text: "cocoa" },
-            { text: "banana slices" },
-            { text: "strawberry" },
-            { text: "nuts" }
+            { text: "Pasta" },
+            { text: "pumpkin" },
+            { text: "carrot" },
+            { text: "tofu" },
+            { text: "soy sauce" }
           ],
           nutrition: {
             fat: 10,

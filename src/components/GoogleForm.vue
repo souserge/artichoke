@@ -16,7 +16,7 @@
 export default {
   computed: {
     screenWidth() {
-      return screen.width;
+      return screen.availWidth;
     }
   }
 };
