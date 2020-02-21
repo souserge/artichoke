@@ -95,7 +95,7 @@ export default {
       dishes: [
         {
           src: require("@/assets/dish-1.jpg"),
-          name: "Rice Pumpkin wok and spinach sauce",
+          name: "Rice with pumpkin wok and spinach sauce",
           desc: "This is a beautiful dish",
           standardSize: 300,
           selectedSize: 300,
