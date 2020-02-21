@@ -16,7 +16,7 @@
 export default {
   computed: {
     screenWidth() {
-      return screen.availWidth;
+      return screen.width;
     }
   }
 };
@@ -24,9 +24,13 @@ export default {
 
 <style lang="scss" scoped>
 .form {
-  margin-top: 12px;
+  margin-top: 20px;
   h2 {
     text-align: center;
+  }
+
+  iframe {
+    width: 100%;
   }
 }
 </style>

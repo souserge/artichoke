@@ -265,7 +265,7 @@ Fiber....................${cn(nutrition.fiber)} g`;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    color: black;
+    color: white;
     font-size: 1em;
     text-decoration: underline;
 
